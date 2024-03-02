@@ -21,13 +21,23 @@ install_platform() {
   for f in $PRODUCTS; do
     if [ -r "_build/$1/$f" ]; then
       mkdir -p "$out/firmware/$1"
+      tar czf "_build/$1.tar.gz" "_build/$1/$f"
       install -m 0444 "_build/$1/$f" "$out/firmware/$1"
     fi
     if [ -r "_build/$f" ]; then
       mkdir -p "$out/firmware/$1"
       install -m 0444 "_build/$f" "$out/firmware/$1"
     fi
+    # ls "$out/firmware/"
+    # tar czf "$out/firmware/$1.tar.gz" "$out/firmware/$1"
   done
+  if [ -r "_build/$1/$f" ]; then
+    tar czf "_build/$1.tar.gz" "_build/$1/$f"
+  fi
+  if [ -r "_build/$f" ]; then
+    tar czf  "_build/$1.tar.gz" "_build/$f"
+  fi
+  install -m 0444 "_build/$1.tar.gz" "$out/firmware/"
 }
 
 make_platform() {
