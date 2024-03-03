@@ -2,34 +2,13 @@ let
   sources = import ./sources.nix;
 in
 { pkgs ? import sources.nixpkgs { } }:
-
-pkgs.stdenv.mkDerivation rec {
-  pname = "apollo";
-  version = "more-rp2040-boards";
-
-  src = sources.apollo;
-
-  nativeBuildInputs = with pkgs;[
-    gcc-arm-embedded
-    cmake
-    python3
-  ];
-
-  phases = [ "unpackPhase" "buildPhase" ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    cp -r --no-preserve=mode,ownership ${sources.tinyusb}/* lib/tinyusb
-    ln -s ${sources.microchip_driver} lib/tinyusb/hw/mcu/microchip
-    ln -s ${sources.uf2} lib/tinyusb/tools/uf2
-
-    ${pkgs.stdenv.shell} ${./helper.sh}
-
-    runHook postBuild
-  '';
-
-  enableParallelBuilding = true;
-
-  PICO_SDK_PATH = "${pkgs.pico-sdk}/lib/pico-sdk";
+{
+  apollo-firmware-cynthion = import ./apollo-firmware.nix { target-board = "cynthion_d11"; };
+  apollo-firmware-cynthion_d11 = import ./apollo-firmware.nix { target-board = "cynthion_d11"; };
+  apollo-firmware-cynthion_d21 = import ./apollo-firmware.nix { target-board = "cynthion_d21"; };
+  apollo-firmware-samd11_xplained = import ./apollo-firmware.nix { target-board = "samd11_xplained"; };
+  apollo-firmware-qtpy = import ./apollo-firmware.nix { target-board = "qtpy"; };
+  apollo-firmware-raspberry_pi_pico = import ./apollo-firmware.nix { target-board = "raspberry_pi_pico"; };
+  apollo-firmware-waveshare_rp2040_zero = import ./apollo-firmware.nix { target-board = "waveshare_rp2040_zero"; };
+  apollo-firmware-adafruit_qtpy_rp2040 = import ./apollo-firmware.nix { target-board = "adafruit_qtpy_rp2040"; };
 }

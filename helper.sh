@@ -64,10 +64,27 @@ cmake_platform() {
 
 cd firmware
 
-make_platform "samd11_xplained"
-make_platform "qtpy" "uf2"
-make_platform "cynthion_d11"
-make_platform "cynthion_d21" "uf2"
-cmake_platform "raspberry_pi_pico"
-cmake_platform "waveshare_rp2040_zero"
-cmake_platform "adafruit_qtpy_rp2040"
+for item in "samd11_xplained" "cynthion_d11"
+do
+    if [ "$1" == "$item" ]; then
+        echo $1
+        make_platform $1
+        exit
+    fi
+done
+
+for item in "qtpy" "cynthion_d21"
+do
+    if [ "$1" == "$item" ]; then
+        make_platform $1 "uf2"
+        exit
+    fi
+done
+
+for item in "raspberry_pi_pico" "waveshare_rp2040_zero" "adafruit_qtpy_rp2040"
+do
+    if [ "$1" == "$item" ]; then
+        cmake_platform $1
+        exit
+    fi
+done
