@@ -27,6 +27,11 @@ jobs:
         name: apollo-firmware
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - name: Build Apollo firmware for ${{ matrix.target-board }}
+    - name: ❄️ Build Apollo firmware for ${{ matrix.target-board }}
       run: |
         nix-build -A apollo-firmware-${{ matrix.target-board }}
+    - name: 📦 Upload binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: apollo-firmware-${{ matrix.target-board }}
+        path: result/*
